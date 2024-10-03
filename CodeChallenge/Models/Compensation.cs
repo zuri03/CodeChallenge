@@ -4,7 +4,9 @@ namespace CodeChallenge.Models;
 
 public class Compensation 
 {
-    public String Employee { get; set; }
+    public String Id { get; set; }
+    
+    public string Employee { get; set; }
 
     public decimal? Salary { get; set; }
 
