@@ -1,7 +1,9 @@
 
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
 using CodeChallenge.Models;
 
@@ -9,6 +11,7 @@ using CodeCodeChallenge.Tests.Integration.Extensions;
 using CodeCodeChallenge.Tests.Integration.Helpers;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.AspNetCore.Http;
 
 namespace CodeCodeChallenge.Tests.Integration
 {
@@ -32,6 +35,39 @@ namespace CodeCodeChallenge.Tests.Integration
         {
             _httpClient.Dispose();
             _testServer.Dispose();
+        }
+
+        [TestMethod]
+        public async Task GenereateReportingStructure_Returns_Ok() 
+        {
+            var id = "16a596ae-edd3-4847-99fe-c4518e82c86f";
+
+            var response = await _httpClient.GetAsync($"api/employee/{id}/Reports");
+            
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+
+            var structure = response.DeserializeContent<ReportingStructure>();
+
+            Assert.AreEqual(id, structure.Employee);
+            Assert.AreEqual(2, structure.NumberOfReports);
+        }
+
+        [TestMethod]
+        public async Task GenereateReportingStructure_Returns_NotFound() 
+        {
+            var id = "doesnotexist";
+
+            var response = await _httpClient.GetAsync($"api/employee/{id}/Reports");
+            
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [TestMethod]
+        public async Task GenereateReportingStructure_Returns_BadRequest() 
+        {
+            var response = await _httpClient.GetAsync($"api/employee/ /Reports");
+            
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [TestMethod]

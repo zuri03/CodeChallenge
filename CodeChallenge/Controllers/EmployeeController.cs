@@ -45,6 +45,30 @@ namespace CodeChallenge.Controllers
             return Ok(employee);
         }
 
+        [HttpGet("{id}/reports", Name = "generateReportingStructure")]
+        public IActionResult GenerateReportingStructure(string id)
+        {
+            if (string.IsNullOrEmpty(id)) 
+            {
+                _logger.LogDebug($"Bad request, id was either null or empty");
+                return BadRequest();
+            }
+
+            var employee = _employeeService.GetById(id);
+
+            if (employee == null) 
+            {
+                _logger.LogDebug($"Employee {id} not found");
+                return NotFound();
+            }
+
+            _logger.LogDebug($"Generating reporting structure for employee {id}");
+
+            var structure = _employeeService.GenerateReportingStructure(employee);
+
+            return Ok(structure);
+        }
+
         [HttpPut("{id}")]
         public IActionResult ReplaceEmployee(String id, [FromBody]Employee newEmployee)
         {

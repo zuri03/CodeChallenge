@@ -59,5 +59,14 @@ namespace CodeChallenge.Services
 
             return newEmployee;
         }
+
+        public ReportingStructure GenerateReportingStructure(Employee employee) 
+        {
+            return new ReportingStructure 
+            {
+                Employee = employee.EmployeeId,
+                NumberOfReports = employee.DirectReports.Count
+            };
+        }
     }
 }
