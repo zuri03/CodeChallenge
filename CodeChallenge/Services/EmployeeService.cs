@@ -62,11 +62,29 @@ namespace CodeChallenge.Services
 
         public ReportingStructure GenerateReportingStructure(Employee employee) 
         {
+            var sumOfReports = SumUpNumberOfReports(employee.EmployeeId);
             return new ReportingStructure 
             {
                 Employee = employee.EmployeeId,
-                NumberOfReports = employee.DirectReports.Count
+                NumberOfReports = sumOfReports
             };
+        }
+
+        public int SumUpNumberOfReports(string employeeId) 
+        {
+            var currentEmployee = _employeeRepository.GetById(employeeId);
+            if (currentEmployee == null) 
+            {
+                return 0;
+            }
+
+            var sum = currentEmployee.DirectReports.Count;
+            foreach (var report in currentEmployee.DirectReports) 
+            {
+                sum += SumUpNumberOfReports(report.EmployeeId);
+            }
+
+            return sum;
         }
     }
 }

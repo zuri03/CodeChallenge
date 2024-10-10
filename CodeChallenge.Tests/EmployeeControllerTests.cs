@@ -49,7 +49,7 @@ namespace CodeCodeChallenge.Tests.Integration
             var structure = response.DeserializeContent<ReportingStructure>();
 
             Assert.AreEqual(id, structure.Employee);
-            Assert.AreEqual(2, structure.NumberOfReports);
+            Assert.AreEqual(4, structure.NumberOfReports);
         }
 
         [TestMethod]
